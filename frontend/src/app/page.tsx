@@ -20,6 +20,9 @@ export default function Home() {
               </div>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/chat" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+                Chat
+              </Link>
               <Link href="/tools" className="text-gray-600 hover:text-gray-900 transition-colors">
                 Tools
               </Link>

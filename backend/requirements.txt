@@ -10,3 +10,4 @@ python-multipart
 redis
 python-dotenv
 httpx
+gunicorn

@@ -287,21 +287,21 @@ export default function ChatPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       {/* Professional Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 backdrop-blur-xl border-b border-blue-500/20 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
-                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-200">
-                  <Sparkles className="w-5 h-5 text-white" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg sm:rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
+                <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transform active:scale-95 sm:group-hover:scale-110 transition-transform duration-200">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
               </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate">
                   {t('appName')}
                 </h1>
-                <p className="text-xs text-gray-400">{t('appDesc')}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400 truncate hidden xs:block">{t('appDesc')}</p>
               </div>
             </div>
 
@@ -309,21 +309,21 @@ export default function ChatPage() {
             <div className="hidden md:flex items-center space-x-1">
               <Link
                 href="/"
-                className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
+                className="px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-sm"
               >
                 <Home className="w-4 h-4" />
                 <span>{t('home')}</span>
               </Link>
               <Link
                 href="/tools"
-                className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
+                className="px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-sm"
               >
                 <Wrench className="w-4 h-4" />
                 <span>{t('tools')}</span>
               </Link>
               <Link
                 href="/chat"
-                className="px-4 py-2 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center gap-2"
+                className="px-3 md:px-4 py-2 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center gap-2 text-sm"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>{t('chat')}</span>
@@ -331,27 +331,28 @@ export default function ChatPage() {
 
               {/* Language Selector */}
               <div className="relative group">
-                <button className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2">
+                <button className="px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-sm">
                   <Globe className="w-4 h-4" />
-                  <span>{language === 'en' ? t('english') : t('swahili')}</span>
+                  <span className="hidden lg:inline">{language === 'en' ? t('english') : t('swahili')}</span>
+                  <span className="lg:hidden">{language === 'en' ? '🇬🇧' : '🇹🇿'}</span>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-2xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="absolute right-0 mt-2 w-44 md:w-48 bg-gray-800 rounded-lg shadow-2xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <button
                     onClick={() => setLanguage('en')}
-                    className={`w-full px-4 py-3 text-left hover:bg-gray-700 transition-colors first:rounded-t-lg flex items-center gap-3 ${
+                    className={`w-full px-3 md:px-4 py-2.5 md:py-3 text-left hover:bg-gray-700 transition-colors first:rounded-t-lg flex items-center gap-2 md:gap-3 text-sm ${
                       language === 'en' ? 'text-blue-400 bg-gray-700/50' : 'text-gray-300'
                     }`}
                   >
-                    <span className="text-xl">🇬🇧</span>
+                    <span className="text-lg md:text-xl">🇬🇧</span>
                     <span>{t('english')}</span>
                   </button>
                   <button
                     onClick={() => setLanguage('sw')}
-                    className={`w-full px-4 py-3 text-left hover:bg-gray-700 transition-colors last:rounded-b-lg flex items-center gap-3 ${
+                    className={`w-full px-3 md:px-4 py-2.5 md:py-3 text-left hover:bg-gray-700 transition-colors last:rounded-b-lg flex items-center gap-2 md:gap-3 text-sm ${
                       language === 'sw' ? 'text-blue-400 bg-gray-700/50' : 'text-gray-300'
                     }`}
                   >
-                    <span className="text-xl">🇹🇿</span>
+                    <span className="text-lg md:text-xl">🇹🇿</span>
                     <span>{t('swahili')}</span>
                   </button>
                 </div>
@@ -361,9 +362,9 @@ export default function ChatPage() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all"
+              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all active:scale-95"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -371,32 +372,32 @@ export default function ChatPage() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-gray-800/95 backdrop-blur-xl border-t border-gray-700">
-            <div className="px-4 py-3 space-y-1">
+            <div className="px-3 py-2 space-y-1">
               <Link
                 href="/"
-                className="block px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-3"
+                className="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2.5 text-sm active:scale-98"
               >
-                <Home className="w-5 h-5" />
+                <Home className="w-4 h-4" />
                 <span>{t('home')}</span>
               </Link>
               <Link
                 href="/tools"
-                className="block px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-3"
+                className="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2.5 text-sm active:scale-98"
               >
-                <Wrench className="w-5 h-5" />
+                <Wrench className="w-4 h-4" />
                 <span>{t('tools')}</span>
               </Link>
               <Link
                 href="/chat"
-                className="block px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center gap-3"
+                className="block px-3 py-2.5 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center gap-2.5 text-sm active:scale-98"
               >
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="w-4 h-4" />
                 <span>{t('chat')}</span>
               </Link>
 
               {/* Language Options */}
               <div className="pt-2 mt-2 border-t border-gray-700">
-                <div className="px-4 py-2 text-xs text-gray-500 uppercase tracking-wider">
+                <div className="px-3 py-1.5 text-[10px] text-gray-500 uppercase tracking-wider">
                   {t('language')}
                 </div>
                 <button
@@ -404,13 +405,13 @@ export default function ChatPage() {
                     setLanguage('en');
                     setIsMenuOpen(false);
                   }}
-                  className={`w-full px-4 py-3 rounded-lg text-left transition-all flex items-center gap-3 ${
+                  className={`w-full px-3 py-2.5 rounded-lg text-left transition-all flex items-center gap-2.5 text-sm active:scale-98 ${
                     language === 'en'
                       ? 'text-blue-400 bg-blue-600/20 border border-blue-500/30'
                       : 'text-gray-300 hover:bg-white/10'
                   }`}
                 >
-                  <span className="text-2xl">🇬🇧</span>
+                  <span className="text-xl">🇬🇧</span>
                   <span>{t('english')}</span>
                 </button>
                 <button
@@ -418,13 +419,13 @@ export default function ChatPage() {
                     setLanguage('sw');
                     setIsMenuOpen(false);
                   }}
-                  className={`w-full px-4 py-3 rounded-lg text-left transition-all flex items-center gap-3 ${
+                  className={`w-full px-3 py-2.5 rounded-lg text-left transition-all flex items-center gap-2.5 text-sm active:scale-98 ${
                     language === 'sw'
                       ? 'text-blue-400 bg-blue-600/20 border border-blue-500/30'
                       : 'text-gray-300 hover:bg-white/10'
                   }`}
                 >
-                  <span className="text-2xl">🇹🇿</span>
+                  <span className="text-xl">🇹🇿</span>
                   <span>{t('swahili')}</span>
                 </button>
               </div>

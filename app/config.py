@@ -1,12 +1,30 @@
 from pydantic_settings import BaseSettings
 from typing import List
 
+import os
+import json
+
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "sqlite:///./tai.db"
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./tai.db")
     
-    # Redis
-    REDIS_URL: str = "redis://localhost:6379"
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Heroku uses postgres:// but SQLAlchemy 1.4+ requires postgresql://
+        if self.DATABASE_URL and self.DATABASE_URL.startswith("postgres://"):
+            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        
+        # Parse ALLOWED_ORIGINS from environment variable if it's a JSON string
+        allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
+        if allowed_origins_env:
+            try:
+                self.ALLOWED_ORIGINS = json.loads(allowed_origins_env)
+            except json.JSONDecodeError:
+                # If it's not JSON, treat it as a comma-separated list
+                self.ALLOWED_ORIGINS = [origin.strip() for origin in allowed_origins_env.split(",")]
+    
+    # Redis (optional - set to empty string if not available)
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
     
     # Security
     SECRET_KEY: str = "your-super-secret-key-change-this-in-production"
@@ -24,7 +42,7 @@ class Settings(BaseSettings):
     DIGITALOCEAN_API_KEY: str = ""  # Set in .env file
     DIGITALOCEAN_MODEL: str = "meta-llama/llama-3.1-8b-instruct"  # or other available models
     
-    # CORS
+    # CORS - Default origins (can be overridden by ALLOWED_ORIGINS env var)
     ALLOWED_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",

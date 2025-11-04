@@ -11,3 +11,4 @@ redis
 python-dotenv
 httpx
 gunicorn
+psycopg2-binary

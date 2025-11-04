@@ -33,6 +33,8 @@ class Settings(BaseSettings):
         "https://www.dolese.tech",
         "http://dolese.tech",
         "http://www.dolese.tech",
+        "https://tai-fjud1g3fw-selus-projects-5458cfd3.vercel.app",
+        "https://vercel.app",
     ]
     
     # App settings

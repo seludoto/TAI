@@ -1,30 +1,15 @@
 from pydantic_settings import BaseSettings
-from typing import List
-
+from typing import List, Optional
+from pydantic import field_validator, model_validator
 import os
 import json
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./tai.db")
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Heroku uses postgres:// but SQLAlchemy 1.4+ requires postgresql://
-        if self.DATABASE_URL and self.DATABASE_URL.startswith("postgres://"):
-            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
-        
-        # Parse ALLOWED_ORIGINS from environment variable if it's a JSON string
-        allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
-        if allowed_origins_env:
-            try:
-                self.ALLOWED_ORIGINS = json.loads(allowed_origins_env)
-            except json.JSONDecodeError:
-                # If it's not JSON, treat it as a comma-separated list
-                self.ALLOWED_ORIGINS = [origin.strip() for origin in allowed_origins_env.split(",")]
+    DATABASE_URL: str = "sqlite:///./tai.db"
     
     # Redis (optional - set to empty string if not available)
-    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
+    REDIS_URL: str = "redis://localhost:6379"
     
     # Security
     SECRET_KEY: str = "your-super-secret-key-change-this-in-production"
@@ -43,21 +28,41 @@ class Settings(BaseSettings):
     DIGITALOCEAN_MODEL: str = "meta-llama/llama-3.1-8b-instruct"  # or other available models
     
     # CORS - Default origins (can be overridden by ALLOWED_ORIGINS env var)
-    ALLOWED_ORIGINS: List[str] = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8080",
-        "https://dolese.tech",
-        "https://www.dolese.tech",
-        "http://dolese.tech",
-        "http://www.dolese.tech",
-        "https://tai-fjud1g3fw-selus-projects-5458cfd3.vercel.app",
-        "https://vercel.app",
-    ]
+    ALLOWED_ORIGINS: str = ""  # Will be parsed from env or use defaults
     
     # App settings
     APP_NAME: str = "TAI Developer Assistant"
     DEBUG: bool = True
+    
+    @model_validator(mode='after')
+    def process_settings(self):
+        # Fix Heroku DATABASE_URL (postgres:// -> postgresql://)
+        if self.DATABASE_URL and self.DATABASE_URL.startswith("postgres://"):
+            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        
+        # Parse ALLOWED_ORIGINS
+        if self.ALLOWED_ORIGINS:
+            try:
+                # Try to parse as JSON
+                self.ALLOWED_ORIGINS = json.loads(self.ALLOWED_ORIGINS)
+            except (json.JSONDecodeError, TypeError):
+                # If it's not JSON, treat it as comma-separated
+                self.ALLOWED_ORIGINS = [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",")]
+        else:
+            # Use default origins
+            self.ALLOWED_ORIGINS = [
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://localhost:8080",
+                "https://dolese.tech",
+                "https://www.dolese.tech",
+                "http://dolese.tech",
+                "http://www.dolese.tech",
+                "https://tai-fjud1g3fw-selus-projects-5458cfd3.vercel.app",
+                "https://vercel.app",
+            ]
+        
+        return self
     
     class Config:
         env_file = ".env"

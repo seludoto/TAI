@@ -1,235 +1,206 @@
-# TAI - Tanzania Artificial Intelligence Developer Assi### 3. Ollama Setup (Local AI Models)
+# TAI Backend
 
-TAI uses Ollama to run AI models locally instead of relying on external APIs.
+FastAPI backend for the TAI (Tanzania Artificial Intelligence) Developer Assistant.
 
-**Option A: Automatic Setup (Recommended)**
-```bash
-# Linux/Mac
-chmod +x setup_ollama.sh
-./setup_ollama.sh
+## Features
 
-# Windows PowerShell (run as Administrator)
-.\setup_ollama.ps1
-```
+- 🤖 AI-powered chat with **dual provider support**:
+  - **DigitalOcean GenAI** (Cloud, fast, reliable)
+  - **Ollama** (Local LLM, free, private)
+- 🔐 JWT-based authentication
+- 💬 Chat management (create, list, delete chats)
+- 📝 Message history with syntax highlighting support
+- 🗄️ PostgreSQL/SQLite database with SQLAlchemy ORM
+- 🔄 Redis caching support
+- 📊 Comprehensive logging
+- 🚀 Developer tools (Code Generator, Debug Assistant, API Helper, CLI Helper)
 
-**Option B: Manual Setup**
-1. Install Ollama from https://ollama.ai
-2. Start Ollama: `ollama serve`
-3. Pull models:
-   ```bash
-   ollama pull mistral     # Recommended for coding
-   ollama pull codellama   # Specialized for code
-   ollama pull llama2      # Alternative general model
+## Tech Stack
+
+- **Framework**: FastAPI
+- **Database**: PostgreSQL/SQLite with SQLAlchemy
+- **Cache**: Redis
+- **AI Providers**: 
+  - **DigitalOcean GenAI** (Llama 3.1 8B/70B/405B)
+  - **Ollama** (Local LLM - Mistral, Llama2, CodeLlama)
+- **Auth**: JWT tokens with bcrypt password hashing
+
+## 🚀 AI Provider Setup
+
+TAI supports two AI providers:
+
+1. **DigitalOcean GenAI** (Recommended for production)
+   - ✅ Fast, reliable responses
+   - ✅ No local resource requirements
+   - ✅ Multiple model sizes
+   - See [DIGITALOCEAN_SETUP.md](./DIGITALOCEAN_SETUP.md) for setup
+
+2. **Ollama** (Good for development/privacy)
+   - ✅ Free and private
+   - ✅ Runs locally
+   - ❌ Requires 8GB+ RAM
+   - ❌ Slower responses
+
+### Quick Start with DigitalOcean GenAI
+
+1. Get API key from [DigitalOcean](https://cloud.digitalocean.com/account/api/tokens)
+2. Update `backend/.env`:
+   ```env
+   AI_PROVIDER=digitalocean
+   DIGITALOCEAN_API_KEY=your_api_key_here
    ```
+3. Restart backend
 
-**Available Models:**
-- `mistral` - General purpose, good for coding (default)
-- `codellama` - Specialized for code generation
-- `llama2` - Good general purpose model
+See [DIGITALOCEAN_SETUP.md](./DIGITALOCEAN_SETUP.md) for detailed instructions.
 
-### 4. Database Setupm focused on programming assistance for Tanzanian and global developers, built with FastAPI and Next.js.
-
-## Project Structure
-
-```
-TAI/
-├── backend/           # FastAPI backend
-│   ├── app/
-│   │   ├── models/    # Database models
-│   │   ├── routers/   # API routes
-│   │   ├── services/  # Business logic
-│   │   └── utils/     # Utilities
-│   ├── requirements.txt
-│   └── main.py
-├── frontend/          # Next.js frontend
-│   ├── src/
-│   │   ├── components/  # React components
-│   │   ├── lib/         # API utilities
-│   │   └── types/       # TypeScript types
-│   └── package.json
-├── docker-compose.yml # Development environment
-└── README.md
-```
-
-## Quick Start
+## Setup
 
 ### Prerequisites
 
 - Python 3.8+
-- Node.js 18+
 - PostgreSQL
-- Redis (optional)
+- Redis (optional, for caching)
 
-### 1. Backend Setup
+### Installation
 
+1. **Clone and navigate to backend directory:**
+   ```bash
+   cd backend
+   ```
+
+2. **Create virtual environment:**
+   ```bash
+   python -m venv venv
+   # Windows
+   venv\Scripts\activate
+   # Linux/Mac
+   source venv/bin/activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up environment variables:**
+   Copy `.env` and update the values:
+   ```bash
+   cp .env .env.local
+   # Edit .env.local with your actual values
+   ```
+
+5. **Set up database:**
+   Make sure PostgreSQL is running and create the database:
+   ```sql
+   CREATE DATABASE tai_db;
+   CREATE USER tai_user WITH PASSWORD 'tai_password';
+   GRANT ALL PRIVILEGES ON DATABASE tai_db TO tai_user;
+   ```
+
+### Running the Backend
+
+**Development mode:**
 ```bash
-cd backend
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# Linux/Mac
-source venv/bin/activate
-
-pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 2. Frontend Setup
-
+**Production mode:**
 ```bash
-cd ../frontend
-npm install
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
-### 3. Environment Configuration
+### Testing
 
-**Backend (.env):**
+Run the test script to verify everything is working:
 ```bash
-DATABASE_URL=postgresql://tai_user:tai_password@localhost:5432/tai_db
-REDIS_URL=redis://localhost:6379
-SECRET_KEY=your-super-secret-key-change-this-in-production
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=mistral
-DEBUG=True
+python test_backend.py
 ```
 
-**Frontend (.env.local):**
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
+### API Documentation
 
-### 4. Database Setup
-
-Create PostgreSQL database:
-```sql
-CREATE DATABASE tai_db;
-CREATE USER tai_user WITH PASSWORD 'tai_password';
-GRANT ALL PRIVILEGES ON DATABASE tai_db TO tai_user;
-```
-
-### 5. Run the Application
-
-**Terminal 1 - Backend:**
-```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd frontend
-npm run dev
-```
-
-### 6. Access the Application
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
-
-## Features Implemented
-
-### ✅ Backend (FastAPI)
-- JWT-based authentication system
-- User registration and login
-- Chat management (create, list, delete)
-- Message handling with AI integration
-- PostgreSQL database with SQLAlchemy
-- Ollama local LLM integration (Mistral, Llama2, CodeLlama)
-- Comprehensive error handling
-- Logging utilities
-
-### ✅ Frontend (Next.js)
-- Modern chat interface
-- Responsive design
-- Syntax-highlighted code blocks
-- User authentication UI
-- Real-time message display
-- Programming language selection
-- Mobile-friendly sidebar
-
-### 🔄 Database Models
-- Users table with authentication
-- Chats table for conversations
-- Messages table with role-based content
+Once running, visit:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **OpenAPI JSON**: http://localhost:8000/openapi.json
 
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register user
-- `POST /api/auth/token` - Login
-- `GET /api/auth/me` - Current user
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/token` - Login and get access token
+- `GET /api/auth/me` - Get current user info
 
 ### Chat
-- `POST /api/chat/` - Create chat
-- `GET /api/chat/` - List chats
-- `GET /api/chat/{id}` - Get chat with messages
-- `POST /api/chat/{id}/messages` - Send message
-- `DELETE /api/chat/{id}` - Delete chat
+- `POST /api/chat/` - Create new chat
+- `GET /api/chat/` - List user chats
+- `GET /api/chat/{chat_id}` - Get chat with messages
+- `POST /api/chat/{chat_id}/messages` - Send message
+- `GET /api/chat/{chat_id}/messages` - Get chat messages
+- `DELETE /api/chat/{chat_id}` - Delete chat
 
-## Development Commands
+## Project Structure
 
-### Backend
-```bash
-# Run tests
-python test_backend.py
-
-# Run with auto-reload
-uvicorn main:app --reload
-
-# Run production
-uvicorn main:app --workers 4
+```
+backend/
+├── app/
+│   ├── models/          # Database models
+│   ├── routers/         # API route handlers
+│   ├── services/        # Business logic (AI service)
+│   ├── utils/           # Utilities (logging)
+│   ├── config.py        # Configuration settings
+│   ├── database.py      # Database connection
+│   └── __init__.py
+├── main.py              # FastAPI application
+├── requirements.txt     # Python dependencies
+├── test_backend.py      # Test script
+└── .env                 # Environment variables
 ```
 
-### Frontend
+## Development
+
+### Adding New Features
+
+1. **Models**: Add new SQLAlchemy models in `app/models/`
+2. **Routes**: Add new API endpoints in `app/routers/`
+3. **Services**: Add business logic in `app/services/`
+4. **Utils**: Add utilities in `app/utils/`
+
+### Database Migrations
+
+This project uses SQLAlchemy's `create_all()` for simplicity. For production, consider using Alembic for migrations.
+
+### Error Handling
+
+The API includes comprehensive error handling with appropriate HTTP status codes and error messages.
+
+## Deployment
+
+### Docker
+
+Use the root `docker-compose.yml` to run the entire stack:
+
 ```bash
-# Development
-npm run dev
-
-# Build
-npm run build
-
-# Production
-npm start
-```
-
-## Docker Development
-
-```bash
-# Run entire stack
 docker-compose up --build
-
-# Run backend only
-docker-compose up backend
-
-# Run database only
-docker-compose up postgres redis
 ```
 
-## Next Steps
+### Environment Variables
 
-1. **Set up OpenAI API key** in backend/.env
-2. **Configure database** connection
-3. **Test the application** end-to-end
-4. **Deploy to production** (Vercel + Railway/DigitalOcean)
-
-## Technologies Used
-
-- **Backend**: FastAPI, SQLAlchemy, PostgreSQL, Redis, Ollama
-- **Frontend**: Next.js, TypeScript, Tailwind CSS, Axios
-- **AI**: Ollama (Local LLM - Mistral, Llama2, CodeLlama)
-- **DevOps**: Docker, docker-compose
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL connection URL | Required |
+| `REDIS_URL` | Redis connection URL | `redis://localhost:6379` |
+| `SECRET_KEY` | JWT secret key | Required |
+| `OLLAMA_BASE_URL` | Ollama API URL | `http://localhost:11434` |
+| `OLLAMA_MODEL` | Ollama model to use | `mistral` |
+| `DEBUG` | Enable debug mode | `False` |
 
 ## Contributing
 
-1. Backend code in `/backend`
-2. Frontend code in `/frontend`
-3. Follow existing patterns
-4. Add tests for new features
-5. Update documentation
+1. Follow the existing code style
+2. Add tests for new features
+3. Update documentation
+4. Use meaningful commit messages
 
----
+## License
 
-**Built with ❤️ for Tanzanian developers**
+MIT License

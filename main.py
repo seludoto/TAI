@@ -14,8 +14,18 @@ from app.config import settings
 async def lifespan(app: FastAPI):
     # Startup
     print("Starting TAI Backend...")
-    # Create database tables on startup
-    Base.metadata.create_all(bind=engine)
+    print(f"Database URL: {settings.DATABASE_URL[:20]}...")  # Print first 20 chars only
+    print(f"AI Provider: {settings.AI_PROVIDER}")
+    print(f"CORS Origins: {settings.ALLOWED_ORIGINS}")
+    
+    try:
+        # Create database tables on startup
+        Base.metadata.create_all(bind=engine)
+        print("Database tables created successfully")
+    except Exception as e:
+        print(f"Warning: Could not create database tables: {e}")
+        print("App will continue without database...")
+    
     yield
     # Shutdown
     print("Shutting down TAI Backend...")

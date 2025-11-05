@@ -35,7 +35,11 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     @model_validator(mode='after')
-    def parse_cors_origins(self):
+    def process_settings(self):
+        # Fix Heroku DATABASE_URL (postgres:// -> postgresql://)
+        if self.DATABASE_URL and self.DATABASE_URL.startswith("postgres://"):
+            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        
         # Convert ALLOWED_ORIGINS to list for use in FastAPI
         if isinstance(self.ALLOWED_ORIGINS, str):
             if self.ALLOWED_ORIGINS == "*":
@@ -44,13 +48,6 @@ class Settings(BaseSettings):
             else:
                 # Parse comma-separated string
                 self.ALLOWED_ORIGINS = [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",")]
-        return self
-    
-    @model_validator(mode='after')
-    def process_database_url(self):
-        # Fix Heroku DATABASE_URL (postgres:// -> postgresql://)
-        if self.DATABASE_URL and self.DATABASE_URL.startswith("postgres://"):
-            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
         
         return self
     

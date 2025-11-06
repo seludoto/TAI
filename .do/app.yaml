@@ -12,14 +12,11 @@ services:
       branch: main
       deploy_on_push: true
     
-    # Build configuration
-    build_command: pip install -r requirements.txt
+    # Use Dockerfile for build
+    dockerfile_path: Dockerfile
     
     # Run configuration
     run_command: gunicorn main:app --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker --workers 2
-    
-    # Use Dockerfile for build
-    dockerfile_path: Dockerfile
     
     # Environment variables
     envs:
@@ -65,14 +62,6 @@ services:
     # Instance configuration
     instance_count: 1
     instance_size_slug: basic-xxs
-    
-    # Auto-scaling (optional)
-    autoscaling:
-      min_instance_count: 1
-      max_instance_count: 3
-      metrics:
-        cpu:
-          percent: 80
 
 # Database (PostgreSQL)
 databases:

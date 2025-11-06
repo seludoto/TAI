@@ -8,8 +8,8 @@ region: nyc
 services:
   - name: api
     github:
-      repo: <your-username>/TAI
-      branch: master
+      repo: seludoto/TAI
+      branch: main
       deploy_on_push: true
     
     # Build configuration

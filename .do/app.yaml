@@ -23,12 +23,12 @@ services:
       - key: DATABASE_URL
         scope: RUN_TIME
         type: SECRET
-        value: ${db.DATABASE_URL}
+        value: sqlite:///./tai.db
       
       - key: SECRET_KEY
         scope: RUN_TIME
         type: SECRET
-        value: your-production-secret-key-change-this
+        value: your-production-secret-key-change-this-to-something-secure-12345
       
       - key: AI_PROVIDER
         scope: RUN_TIME
@@ -62,10 +62,3 @@ services:
     # Instance configuration
     instance_count: 1
     instance_size_slug: basic-xxs
-
-# Database (PostgreSQL)
-databases:
-  - name: db
-    engine: PG
-    production: false
-    version: "15"

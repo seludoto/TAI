@@ -16,7 +16,7 @@ services:
     dockerfile_path: Dockerfile
     
     # Run configuration
-    run_command: gunicorn main:app --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker --workers 2
+    run_command: gunicorn main:app --bind 0.0.0.0:8080 --worker-class uvicorn.workers.UvicornWorker --workers 2
     
     # Environment variables
     envs:
@@ -50,14 +50,14 @@ services:
     # Health check
     health_check:
       http_path: /
-      initial_delay_seconds: 10
+      initial_delay_seconds: 30
       period_seconds: 10
       timeout_seconds: 5
       success_threshold: 1
       failure_threshold: 3
     
     # HTTP configuration
-    http_port: 8000
+    http_port: 8080
     
     # Instance configuration
     instance_count: 1

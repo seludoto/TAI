@@ -10,6 +10,9 @@ import {
 import Link from 'next/link';
 import './animations.css';
 
+// API Configuration
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -350,7 +353,7 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat/general', {
+      const response = await fetch(`${API_URL}/api/chat/general`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

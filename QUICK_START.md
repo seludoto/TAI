@@ -3,6 +3,7 @@
 ## ✅ Current Status
 
 Your TAI Platform is ready for deployment with:
+
 - ✅ ChatGPT-style UI with 20+ advanced features
 - ✅ Enhanced AI backend with 9 specialized capabilities
 - ✅ Environment-based configuration
@@ -16,13 +17,14 @@ Your TAI Platform is ready for deployment with:
 ### Step 1: Push to GitHub (5 minutes)
 
 1. **Create GitHub Repository**
-   - Go to: https://github.com/new
+   - Go to: <https://github.com/new>
    - Repository name: `TAI`
    - Keep it Private or Public (your choice)
    - **Don't** initialize with README
    - Click "Create repository"
 
 2. **Push Your Code**
+
    ```powershell
    cd d:\projects\TAI
    
@@ -39,7 +41,7 @@ Your TAI Platform is ready for deployment with:
 
 **Option A: Web Console (Recommended - Easiest)**
 
-1. Login: https://cloud.digitalocean.com
+1. Login: <https://cloud.digitalocean.com>
 2. Click: **Create** → **Apps**
 3. Source: Choose **GitHub**
 4. Authorize: Connect your GitHub account
@@ -51,9 +53,10 @@ Your TAI Platform is ready for deployment with:
    - Name: `tai-platform-api`
    - Region: Choose closest (NYC, SFO, etc.)
    - Plan: **Basic** ($5/mo)
-   
+
 9. **Environment Variables:**
    Click "Edit" and add:
+
    ```
    SECRET_KEY = your-super-secret-key-change-this-12345
    AI_PROVIDER = digitalocean
@@ -74,6 +77,7 @@ Your TAI Platform is ready for deployment with:
     - Copy your app URL: `https://tai-platform-api-xxxxx.ondigitalocean.app`
 
 **Option B: CLI (Advanced)**
+
 ```powershell
 # Install CLI
 choco install doctl
@@ -92,14 +96,16 @@ doctl apps create --spec .do/app.yaml
 After backend is deployed:
 
 1. **Update Production URL**
-   
+
    Edit: `frontend/.env.production`
+
    ```env
    # Replace with your actual DigitalOcean URL
    NEXT_PUBLIC_API_URL=https://tai-platform-api-xxxxx.ondigitalocean.app
    ```
 
 2. **Commit Changes**
+
    ```powershell
    cd d:\projects\TAI
    git add .
@@ -112,11 +118,13 @@ After backend is deployed:
 ### Step 4: Deploy Frontend to Vercel (5 minutes)
 
 **Option A: Auto Deploy (If GitHub Connected)**
+
 - Just push to GitHub (done in Step 3)
 - Vercel auto-deploys
-- Go to: https://vercel.com/dashboard
+- Go to: <https://vercel.com/dashboard>
 
 **Option B: Manual Deploy**
+
 ```powershell
 # Install Vercel CLI (if needed)
 npm install -g vercel
@@ -130,15 +138,18 @@ vercel --prod
 ```
 
 **Option C: Import from GitHub**
-1. Go to: https://vercel.com/new
+
+1. Go to: <https://vercel.com/new>
 2. Import your `TAI` repository
 3. Configure:
    - Framework: **Next.js**
    - Root Directory: **frontend**
    - Add Environment Variable:
+
      ```
      NEXT_PUBLIC_API_URL = https://tai-platform-api-xxxxx.ondigitalocean.app
      ```
+
 4. Click **Deploy**
 
 ---
@@ -146,10 +157,12 @@ vercel --prod
 ### Step 5: Test Your Deployment (5 minutes)
 
 1. **Test Backend**
+
    ```powershell
    # Replace with your actual URL
    curl https://tai-platform-api-xxxxx.ondigitalocean.app/
    ```
+
    Should return: `{"message": "Welcome to TAI Platform API"}`
 
 2. **Test Frontend**
@@ -226,6 +239,7 @@ git log --oneline -5
 Your deployed platform includes:
 
 **UI Features:**
+
 - ✅ Dual theme system (dark/light mode)
 - ✅ Voice input with speech recognition
 - ✅ Message reactions (like/dislike)
@@ -238,6 +252,7 @@ Your deployed platform includes:
 - ✅ Responsive design
 
 **AI Capabilities:**
+
 - ✅ Smart conversational AI
 - ✅ Code assistance (explain, debug, generate)
 - ✅ Content generation (blog, email, summary)
@@ -259,6 +274,7 @@ Your deployed platform includes:
 ## 🆘 Need Help?
 
 **Backend Issues:**
+
 ```powershell
 # View logs
 doctl apps logs <app-id> --type run
@@ -268,6 +284,7 @@ doctl apps get <app-id>
 ```
 
 **Frontend Issues:**
+
 ```powershell
 # Check Vercel logs
 vercel logs
@@ -278,6 +295,7 @@ vercel --prod --force
 ```
 
 **Common Issues:**
+
 - CORS errors? Update `ALLOWED_ORIGINS` in DigitalOcean
 - 404 errors? Check `NEXT_PUBLIC_API_URL` is correct
 - Build fails? Check `requirements.txt` and `package.json`

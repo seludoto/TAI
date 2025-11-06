@@ -223,3 +223,149 @@ async def delete_chat(
     db.delete(chat)
     db.commit()
     return {"message": "Chat deleted successfully"}
+
+# ==== Content Generation Endpoints ====
+
+class BlogPostRequest(BaseModel):
+    topic: str
+    tone: str = "professional"  # professional, casual, technical, friendly
+    length: str = "medium"  # short, medium, long
+
+@router.post("/generate/blog", response_model=GeneralChatResponse)
+async def generate_blog(request: BlogPostRequest):
+    """Generate a blog post on a given topic"""
+    try:
+        response = await ai_service.generate_blog_post(
+            topic=request.topic,
+            tone=request.tone,
+            length=request.length
+        )
+        return GeneralChatResponse(response=response, context="content_generation")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating blog post: {str(e)}")
+
+class EmailRequest(BaseModel):
+    purpose: str
+    recipient: str
+    tone: str = "professional"
+
+@router.post("/generate/email", response_model=GeneralChatResponse)
+async def generate_email(request: EmailRequest):
+    """Generate an email for a specific purpose"""
+    try:
+        response = await ai_service.write_email(
+            purpose=request.purpose,
+            recipient=request.recipient,
+            tone=request.tone
+        )
+        return GeneralChatResponse(response=response, context="content_generation")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating email: {str(e)}")
+
+class SummaryRequest(BaseModel):
+    text: str
+    length: str = "short"  # short, medium, detailed
+
+@router.post("/generate/summary", response_model=GeneralChatResponse)
+async def generate_summary(request: SummaryRequest):
+    """Summarize long text into key points"""
+    try:
+        response = await ai_service.summarize_text(
+            text=request.text,
+            length=request.length
+        )
+        return GeneralChatResponse(response=response, context="content_generation")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating summary: {str(e)}")
+
+class TranslationRequest(BaseModel):
+    text: str
+    target_language: str
+
+@router.post("/generate/translate", response_model=GeneralChatResponse)
+async def translate_text(request: TranslationRequest):
+    """Translate text to target language"""
+    try:
+        response = await ai_service.translate_text(
+            text=request.text,
+            target_language=request.target_language
+        )
+        return GeneralChatResponse(response=response, context="content_generation")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error translating text: {str(e)}")
+
+# ==== Personal Assistant Endpoints ====
+
+class TodoRequest(BaseModel):
+    task_description: str
+
+@router.post("/assistant/todo", response_model=GeneralChatResponse)
+async def create_todo(request: TodoRequest):
+    """Create a structured todo list from task description"""
+    try:
+        response = await ai_service.create_todo_list(request.task_description)
+        return GeneralChatResponse(response=response, context="personal_assistant")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating todo list: {str(e)}")
+
+class RecommendationRequest(BaseModel):
+    query: str
+    context: Optional[str] = ""
+
+@router.post("/assistant/recommend", response_model=GeneralChatResponse)
+async def get_recommendations(request: RecommendationRequest):
+    """Get personalized recommendations"""
+    try:
+        response = await ai_service.provide_recommendations(
+            query=request.query,
+            context=request.context
+        )
+        return GeneralChatResponse(response=response, context="personal_assistant")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting recommendations: {str(e)}")
+
+class KnowledgeRequest(BaseModel):
+    question: str
+
+@router.post("/assistant/knowledge", response_model=GeneralChatResponse)
+async def answer_question(request: KnowledgeRequest):
+    """Answer general knowledge questions"""
+    try:
+        response = await ai_service.answer_knowledge_question(request.question)
+        return GeneralChatResponse(response=response, context="personal_assistant")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error answering question: {str(e)}")
+
+class ScheduleRequest(BaseModel):
+    tasks: List[str]
+    duration: str  # day, week, month
+    priority: str = "balanced"  # balanced, urgent, important
+
+@router.post("/assistant/schedule", response_model=GeneralChatResponse)
+async def plan_schedule(request: ScheduleRequest):
+    """Create a schedule from list of tasks"""
+    try:
+        response = await ai_service.plan_schedule(
+            tasks=request.tasks,
+            duration=request.duration,
+            priority=request.priority
+        )
+        return GeneralChatResponse(response=response, context="personal_assistant")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error planning schedule: {str(e)}")
+
+class BrainstormRequest(BaseModel):
+    topic: str
+    count: int = 10
+
+@router.post("/assistant/brainstorm", response_model=GeneralChatResponse)
+async def brainstorm_ideas(request: BrainstormRequest):
+    """Generate creative ideas for a topic"""
+    try:
+        response = await ai_service.brainstorm_ideas(
+            topic=request.topic,
+            count=request.count
+        )
+        return GeneralChatResponse(response=response, context="personal_assistant")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error brainstorming ideas: {str(e)}")

@@ -174,30 +174,50 @@ class AIService:
         """
         Build system prompt based on programming language context
         """
-        base_prompt = """You are TAI, an AI assistant specialized in programming and software development. 
-        You help developers with coding questions, debugging, best practices, and technical guidance.
-        
-        Key characteristics:
-        - Provide clear, accurate, and helpful responses
-        - Include code examples when relevant
-        - Explain concepts step by step
-        - Suggest best practices and modern approaches
-        - Be concise but comprehensive
-        - Support multiple programming languages
-        
+        base_prompt = """You are TAI (Tanzania AI), a highly intelligent and friendly AI assistant specialized in programming, software development, and general assistance.
+
+        Your personality:
+        - Conversational and natural, like ChatGPT
+        - Professional yet approachable
+        - Patient and encouraging with beginners
+        - Knowledgeable and precise with experts
+        - Context-aware and adaptive to user needs
+
+        Your capabilities:
+        1. **Code Assistance**: Generate, debug, explain, and optimize code in any language
+        2. **Technical Guidance**: Best practices, architecture, algorithms, data structures
+        3. **Content Creation**: Write documentation, blogs, emails, summaries, translations
+        4. **Problem Solving**: Debug issues, suggest solutions, optimize performance
+        5. **Learning Support**: Teach concepts, explain topics, provide examples
+        6. **Personal Assistant**: Help with tasks, provide recommendations, answer questions
+
+        When responding:
+        - Be conversational and human-like
+        - Remember context from the conversation
+        - Ask clarifying questions when needed
+        - Provide code examples with proper syntax highlighting
+        - Explain your reasoning step-by-step
+        - Offer alternatives and best practices
+        - Be concise but thorough
+        - Use markdown formatting for better readability
+        - Include emojis sparingly for friendly tone
+
         When providing code:
-        - Use proper syntax highlighting
-        - Include comments for clarity
+        - Use proper syntax highlighting with language tags
+        - Include helpful comments
         - Show complete, runnable examples
-        - Explain what the code does and why it's structured that way"""
+        - Explain the logic and approach
+        - Suggest improvements or alternatives
+        - Mention potential edge cases"""
         
         if programming_language:
             language_specific = f"""
-            
-            Current focus: {programming_language} development
-            - Provide {programming_language}-specific solutions and patterns
-            - Follow {programming_language} best practices and conventions
-            - Reference relevant {programming_language} libraries and frameworks when appropriate"""
+
+        Current context: {programming_language} development
+        - Prioritize {programming_language}-specific solutions
+        - Follow {programming_language} idioms and conventions
+        - Reference popular {programming_language} libraries/frameworks
+        - Consider {programming_language} version compatibility"""
             base_prompt += language_specific
         
         return base_prompt
@@ -222,6 +242,164 @@ class AIService:
         """
         prompt = f"Generate a {programming_language} code template for: {description}\n\nProvide a complete, well-structured example with comments."
         return await self.generate_response(prompt, programming_language)
+    
+    # ==== Content Generation Features ====
+    
+    async def generate_blog_post(self, topic: str, tone: str = "professional", length: str = "medium") -> str:
+        """
+        Generate a blog post on a given topic
+        """
+        prompt = f"""Write a {tone} blog post about: {topic}
+
+Length: {length} (short=~300 words, medium=~600 words, long=~1000 words)
+
+Include:
+- Engaging introduction
+- Well-structured main points
+- Relevant examples
+- Conclusion with key takeaways
+
+Make it informative and engaging."""
+        return await self.generate_response(prompt)
+    
+    async def write_email(self, purpose: str, recipient: str, tone: str = "professional") -> str:
+        """
+        Generate an email for a specific purpose
+        """
+        prompt = f"""Write a {tone} email for the following purpose:
+
+Purpose: {purpose}
+Recipient: {recipient}
+
+Include:
+- Appropriate subject line
+- Professional greeting
+- Clear message body
+- Proper closing
+
+Format it properly with clear sections."""
+        return await self.generate_response(prompt)
+    
+    async def summarize_text(self, text: str, length: str = "short") -> str:
+        """
+        Summarize long text into key points
+        """
+        prompt = f"""Summarize the following text into {length} format:
+
+{text}
+
+Provide:
+- Key points as bullet points
+- Main conclusions
+- Important details
+
+Keep it clear and concise."""
+        return await self.generate_response(prompt)
+    
+    async def translate_text(self, text: str, target_language: str) -> str:
+        """
+        Translate text to target language
+        """
+        prompt = f"""Translate the following text to {target_language}:
+
+{text}
+
+Provide a natural, accurate translation that preserves the meaning and tone."""
+        return await self.generate_response(prompt)
+    
+    async def generate_product_description(self, product_name: str, features: list, target_audience: str) -> str:
+        """
+        Generate compelling product description
+        """
+        features_text = "\n".join([f"- {feature}" for feature in features])
+        prompt = f"""Create a compelling product description for:
+
+Product: {product_name}
+Target Audience: {target_audience}
+
+Features:
+{features_text}
+
+Make it engaging, highlight benefits, and include a call-to-action."""
+        return await self.generate_response(prompt)
+    
+    # ==== Personal Assistant Features ====
+    
+    async def create_todo_list(self, task_description: str) -> str:
+        """
+        Create a structured todo list from task description
+        """
+        prompt = f"""Based on this task description, create a detailed todo list:
+
+{task_description}
+
+Format as:
+1. [  ] Task 1
+2. [  ] Task 2
+etc.
+
+Break down complex tasks into manageable steps."""
+        return await self.generate_response(prompt)
+    
+    async def provide_recommendations(self, query: str, context: str = "") -> str:
+        """
+        Provide personalized recommendations
+        """
+        context_text = f"\nContext: {context}" if context else ""
+        prompt = f"""Provide thoughtful recommendations for:
+
+{query}{context_text}
+
+Include:
+- Multiple options with pros/cons
+- Reasoning for each recommendation
+- Best practices or tips"""
+        return await self.generate_response(prompt)
+    
+    async def answer_knowledge_question(self, question: str) -> str:
+        """
+        Answer general knowledge questions
+        """
+        prompt = f"""Answer this question comprehensively:
+
+{question}
+
+Provide:
+- Clear, accurate answer
+- Relevant context or background
+- Examples if helpful
+- Sources or references when applicable"""
+        return await self.generate_response(prompt)
+    
+    async def plan_schedule(self, tasks: list, duration: str, priority: str = "balanced") -> str:
+        """
+        Create a schedule from list of tasks
+        """
+        tasks_text = "\n".join([f"- {task}" for task in tasks])
+        prompt = f"""Create a {duration} schedule with {priority} priority for these tasks:
+
+{tasks_text}
+
+Format as a clear timeline with:
+- Time slots
+- Task assignments
+- Break periods
+- Buffer time for unexpected items"""
+        return await self.generate_response(prompt)
+    
+    async def brainstorm_ideas(self, topic: str, count: int = 10) -> str:
+        """
+        Generate creative ideas for a topic
+        """
+        prompt = f"""Brainstorm {count} creative ideas for: {topic}
+
+For each idea provide:
+1. Brief title/name
+2. Short description
+3. Why it's valuable
+
+Make them diverse and innovative."""
+        return await self.generate_response(prompt)
 
 # Global AI service instance
 ai_service = AIService()

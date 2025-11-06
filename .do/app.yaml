@@ -47,15 +47,6 @@ services:
         scope: RUN_TIME
         value: "false"
     
-    # Health check
-    health_check:
-      http_path: /
-      initial_delay_seconds: 30
-      period_seconds: 10
-      timeout_seconds: 5
-      success_threshold: 1
-      failure_threshold: 3
-    
     # HTTP configuration
     http_port: 8080
     

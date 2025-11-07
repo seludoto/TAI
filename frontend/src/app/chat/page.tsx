@@ -536,14 +536,14 @@ export default function ChatPage() {
   };
 
   return (
-    <div className={`min-h-screen flex transition-colors duration-300 ${
+    <div className={`min-h-screen flex transition-colors duration-300 overflow-hidden ${
       theme === 'dark' 
         ? 'bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950' 
         : 'bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50'
     }`}>
       {/* Settings Modal */}
       {showSettings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className={`w-full max-w-md rounded-2xl shadow-2xl ${
             theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
           }`}>
@@ -794,37 +794,73 @@ export default function ChatPage() {
 
               {/* Features Dropdown */}
               <div className="relative group">
-                <button className="px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all flex items-center gap-2 text-sm">
+                <button className={`px-3 md:px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-sm ${
+                  theme === 'dark' 
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}>
                   <Wand2 className="w-4 h-4" />
                   <span>{t('features')}</span>
                 </button>
-                <div className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-lg shadow-2xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 max-h-96 overflow-y-auto">
+                <div className={`absolute right-0 mt-2 w-56 rounded-lg shadow-2xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 max-h-96 overflow-y-auto z-50 ${
+                  theme === 'dark' 
+                    ? 'bg-gray-800 border-gray-700' 
+                    : 'bg-white border-gray-200'
+                }`}>
                   <div className="p-2 space-y-1">
-                    <button onClick={() => setFeatureMode('blog')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('blog')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <FileText className="w-4 h-4" />
                       <span>{t('blogPost')}</span>
                     </button>
-                    <button onClick={() => setFeatureMode('email')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('email')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <Mail className="w-4 h-4" />
                       <span>{t('emailWriter')}</span>
                     </button>
-                    <button onClick={() => setFeatureMode('summary')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('summary')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <Book className="w-4 h-4" />
                       <span>{t('summarize')}</span>
                     </button>
-                    <button onClick={() => setFeatureMode('translate')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('translate')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <Languages className="w-4 h-4" />
                       <span>{t('translate')}</span>
                     </button>
-                    <button onClick={() => setFeatureMode('todo')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('todo')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <ListTodo className="w-4 h-4" />
                       <span>{t('todoList')}</span>
                     </button>
-                    <button onClick={() => setFeatureMode('recommend')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('recommend')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <Lightbulb className="w-4 h-4" />
                       <span>{t('recommend')}</span>
                     </button>
-                    <button onClick={() => setFeatureMode('knowledge')} className="w-full px-3 py-2 text-left hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-300">
+                    <button onClick={() => setFeatureMode('knowledge')} className={`w-full px-3 py-2 text-left rounded-lg transition-colors flex items-center gap-2 text-sm ${
+                      theme === 'dark' 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                       <HelpCircle className="w-4 h-4" />
                       <span>{t('knowledge')}</span>
                     </button>
@@ -881,8 +917,8 @@ export default function ChatPage() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-gray-800/95 backdrop-blur-xl border-t border-gray-700">
-            <div className="px-3 py-2 space-y-1">
+          <div className="md:hidden bg-gray-800/95 backdrop-blur-xl border-t border-gray-700 absolute top-full left-0 right-0 z-50 shadow-2xl">
+            <div className="px-3 py-2 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
               <Link
                 href="/"
                 className="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2.5 text-sm active:scale-98"

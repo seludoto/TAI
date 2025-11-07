@@ -960,7 +960,7 @@ export default function ChatPage() {
                   {examplePrompts.map((example, index) => (
                     <button
                       key={index}
-                      onClick={() => handleExampleClick(example.text, example.category)}
+                      onClick={() => handleExampleClick(example.text)}
                       className="p-4 rounded-xl bg-gray-800/50 border border-gray-700 hover:border-emerald-500/50 hover:bg-gray-800 transition-all text-left group"
                     >
                       <div className="flex items-start gap-3">

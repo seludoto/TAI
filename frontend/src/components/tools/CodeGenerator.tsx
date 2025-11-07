@@ -36,6 +36,7 @@ export default function CodeGenerator() {
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('python');
   const [framework, setFramework] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<CodeResponse | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);

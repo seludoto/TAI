@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Code, Play, Copy, Check, Sparkles, BookOpen } from 'lucide-react';
+import { Code, Copy, Check, Sparkles, BookOpen } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { getTemplatesByLanguage } from '@/lib/codeTemplates';
@@ -36,7 +36,6 @@ export default function CodeGenerator() {
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('python');
   const [framework, setFramework] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<CodeResponse | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);

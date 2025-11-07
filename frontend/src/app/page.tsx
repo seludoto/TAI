@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Code, MessageSquare, Sparkles, Users, ArrowRight, Github, Zap, Bug, Terminal } from "lucide-react";
+import { Code, MessageSquare, Sparkles, Users, ArrowRight, Zap, Bug, Terminal } from "lucide-react";
 
 export default function Home() {
   return (

@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
   Send, Copy, Check, Sparkles, Code, Bug, Book, Briefcase, Menu, X, Globe, 
-  Settings, Home, Wrench, User, LogOut, Mail, FileText, Languages, ListTodo,
+  Settings, Home, Wrench, User, Mail, FileText, Languages, ListTodo,
   Lightbulb, Calendar, HelpCircle, Wand2, Bot, Mic, MicOff, Sun, Moon, Download,
-  Share2, ThumbsUp, ThumbsDown, MoreVertical, Edit, Trash2, Pin, Search
+  Share2, ThumbsUp, ThumbsDown, Trash2, Pin, Search
 } from 'lucide-react';
 import Link from 'next/link';
 import './animations.css';
@@ -45,7 +45,6 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [featureMode, setFeatureMode] = useState<FeatureMode>('chat');
-  const [showFeaturePanel, setShowFeaturePanel] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [conversations, setConversations] = useState<Array<{id: string, title: string, lastMessage: string, timestamp: Date}>>([]);
   const [theme, setTheme] = useState<Theme>('dark');
@@ -54,7 +53,7 @@ export default function ChatPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   // Translations
   const translations: Translations = {
@@ -235,7 +234,7 @@ export default function ChatPage() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleExampleClick = (exampleText: string, category: string) => {
+  const handleExampleClick = (exampleText: string) => {
     setInput(exampleText);
     // Auto-send after a brief delay
     setTimeout(() => {
@@ -264,7 +263,7 @@ export default function ChatPage() {
       return;
     }
 
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const SpeechRecognition = (window as unknown as { webkitSpeechRecognition: new () => SpeechRecognition }).webkitSpeechRecognition || (window as unknown as { SpeechRecognition: new () => SpeechRecognition }).SpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = language === 'en' ? 'en-US' : 'sw-TZ';
     recognition.continuous = false;
@@ -274,7 +273,7 @@ export default function ChatPage() {
       setIsRecording(true);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setInput(prev => prev + transcript);
       setIsRecording(false);

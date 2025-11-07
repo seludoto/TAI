@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Chat, Message, User } from '@/types';
 import { chatAPI, authAPI, isAuthenticated, setAuthToken, removeAuthToken } from '@/lib/api';
 import ChatSidebar from './ChatSidebar';
